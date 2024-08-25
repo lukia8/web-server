@@ -17,28 +17,22 @@ public class Sample01 {
 
       int port = 8080;
 
-
       // 指定のポートでHTTPサーバを作成
-
       HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
 
 
       // ホーム画面
-
       server.createContext("/", new RootHandler());
 
 
       // 管理画面
-
       server.createContext("/manage", new ManageHandler());
 
 
       // サーバーを起動
-
       server.start();
 
       System.out.println("実行ポート：" + port);
-
    }
 
 
@@ -46,7 +40,6 @@ public class Sample01 {
    public static class RootHandler implements HttpHandler {
 
       @Override
-
       public void handle(HttpExchange exchange) throws IOException {
 
          // 画面に表示するHTMLコンテンツ
@@ -57,7 +50,6 @@ public class Sample01 {
 
          // レスポンスのコンテンツタイプを設定
          exchange.getResponseHeaders().set("Content-Type", "text/html; charset=UTF-8");
-
 
          // レスポンスのサイズを設定
          exchange.sendResponseHeaders(200, htmlResponse.getBytes(StandardCharsets.UTF_8).length);
