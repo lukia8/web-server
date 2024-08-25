@@ -1,0 +1,3 @@
+default-php-exe-path: ""
+web-server:
+    port: 8080

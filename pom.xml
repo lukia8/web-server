@@ -12,19 +12,97 @@
         <maven.compiler.source>17</maven.compiler.source> <!--Compille時に用いるJavaバージョンを指定-->
         <maven.compiler.target>17</maven.compiler.target> <!--Compille時に用いるJavaバージョンを指定-->
     </properties>
+    <dependencies>
+        <dependency>
+	        <groupId>org.yaml</groupId>
+	        <artifactId>snakeyaml</artifactId>
+	        <version>2.0</version>
+	    </dependency>
+        <!-- https://mvnrepository.com/artifact/org.json/json -->
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20210307</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.4.5</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>2.0.0</version>
+        </dependency>
+    </dependencies>
+    
+    <!--以下、build時の設定-->
     <build>
+        <finalName>web-server</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
+                <!--shadeプラグインを用いて、依存関係をすべてJarに含める-->
+                <!--これがないと、外部の依存関係からimportしたメソッドなんかがJarにしたときに途端に使えなくなってしまうため必要-->
+                <artifactId>maven-shade-plugin</artifactId>
                 <version>3.2.0</version>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <mainClass>com.lukia.Main</mainClass> <!-- ここに実行可能なメインクラスを指定 -->
-                        </manifest>
-                    </archive>
-                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <source>17</source>
+                            <target>17</target>
+                            <archive>
+                                <manifest>
+                                    <mainClass>com.lukia.Main</mainClass>
+                                </manifest>
+                            </archive>
+                            <!--以下、エントリーポイントの設定-->
+                            <!--shadeプラグインを使わない場合は、次のように、マニフェストを生成する-->
+                            <!--
+                            <archive>
+                                <manifest>
+                                    <mainClass>com.lukia.Main</mainClass>
+                                </manifest>
+                            </archive>
+                            -->
+                            <!--特定の依存関係をJarに含めたり、Jarから除外する場合に必要-->
+                            <!--
+                            <filters>
+                                <filter>
+                                    <artifact>mysql:mysql-connector-java</artifact>
+                                    <includes>
+                                        <include>**/*</include>
+                                    </includes>
+                                </filter>
+                            </filters>
+                            -->
+                            <filters>
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <exclude>META-INF/*.SF</exclude>
+                                        <exclude>META-INF/*.DSA</exclude>
+                                        <exclude>META-INF/*.RSA</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
+                            <!--特定の2つの依存関係のクラス名が競合している場合に必要-->
+                            <!--
+                            <relocations>
+                            </relocations>
+                            -->
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>com.lukia.Main</mainClass>
+                                </transformer>
+                            </transformers>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

@@ -11,17 +11,19 @@ import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 
 
-public class Sample01 {
+public class StartWebServer {
 
    public static void main(String[] args) throws IOException {
 
-      int port = 8080;
+      // 生成されるConfigからポートを読み込む
+      int port = Main.getConfig().getInt("web-server.port");
 
       // 指定のポートでHTTPサーバを作成
       HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
 
 
       // ホーム画面
+      // http://localhost:8000でアクセス可能
       server.createContext("/", new RootHandler());
 
 
@@ -43,7 +45,7 @@ public class Sample01 {
       public void handle(HttpExchange exchange) throws IOException {
 
          // 画面に表示するHTMLコンテンツ
-         String htmlResponse = "<html lang=\"ja\"><head><meta charset=\"UTF-8\"></head><body><h1>ホーム画面</h1></body></html>";
+         String htmlResponse = "<html lang=\"ja\"><head><meta charset=\"UTF-8\"></head><body><h1>ホーム画面</h1><br><h1 href=\"./manage\">管理画面</h1><h1 href=\"./test\">テスト</h1></body></html>";
 
          // ログ出力
          System.out.println("RootHandlerが呼び出されました。");
