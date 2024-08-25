@@ -1,6 +1,6 @@
 @echo off
 rem ただビルドしたJarを実行するだけのバッチファイル
-rem 拡張機能「Batch Runner by Nils Soderman」を導入すれば、右上の再生マークから実行できる。
+rem 拡張機能「Batch Runner」(by Nils Soderman)を導入すれば、右上の再生マークから実行できる。
 chcp 65001
 rem Java17の環境変数を設定
 set path=C:\Program Files\Java\jdk-22\bin;%PATH%
