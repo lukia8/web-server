@@ -72,7 +72,7 @@ public class Config {
         if (Files.notExists(dataDirectory)) {
             Files.createDirectories(dataDirectory);
         }
-        
+            
         System.out.println("Setting directory location: " + dataDirectory.toString());
 
         // ファイルの作成
