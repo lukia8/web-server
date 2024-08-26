@@ -33,7 +33,7 @@ public class RunPHPServer {
         
         // ファイルの作成
         if (!Files.exists(indexPath)) {
-            try (InputStream in = getClass().getResourceAsStream("/index.php")) {
+            try (InputStream in = getClass().getResourceAsStream("/php/index.php")) {
             	if (Objects.isNull(in)) {
             		System.out.println("Default index.php not found in resources.");
                     return;
@@ -52,8 +52,15 @@ public class RunPHPServer {
     }
 
     public void run() throws IOException {
-        String phpEXEPath = config.getString("web-server.default-php-exe-path", "");
-        int phpServerPort = config.getInt("web-server.php-port", 0);
+        boolean allowphp = config.getBoolean("web-server.php.mode", false);
+        if(!allowphp) {
+            // modeがfalseであれば、サーバー起動を中断
+            System.out.println("php-web-server is canceled because false given to web-server.php.mode in config.\nif you want to start a server, set web-server.php.mode to true.");
+            return;
+        }
+
+        String phpEXEPath = config.getString("web-server.php.php-exe-path", "");
+        int phpServerPort = config.getInt("web-server.php.port", 0);
 
         if(phpEXEPath != null && !phpEXEPath.isEmpty() && phpServerPort != 0) {
             // PHPスクリプトを外部プロセスとして実行
@@ -66,12 +73,8 @@ public class RunPHPServer {
             processBuilder.start();
 
             System.out.println("Running PHP-Server at " + "http://localhost:" + phpServerPort);
-            // PHPスクリプトの出力を取得
-            /*BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            String line;
-            while ((line = reader.readLine()) != null) {
-                System.out.println(line);
-            }*/
+        } else {
+            System.err.println("Error: starting php-web-server is canceled caused by an insufficient config given.\nSee config.");
         }
     }
 }

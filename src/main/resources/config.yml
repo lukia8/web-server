@@ -1,4 +1,9 @@
 web-server:
-    html-port: 8080
-    php-port: 8081
-    default-php-exe-path: ""
+    html:
+        mode: false
+        port: 8080
+    php:
+        mode: false
+        # if you change this port, modify location of href="http://localhost:<your port>" in index.html
+        port: 8081
+        php-exe-path: ""
