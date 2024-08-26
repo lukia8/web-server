@@ -1,4 +1,4 @@
 web-server:
-    port: 8080
+    html-port: 8080
     php-port: 8081
     default-php-exe-path: ""
