@@ -1,3 +1,4 @@
-default-php-exe-path: ""
 web-server:
     port: 8080
+    php-port: 8081
+    default-php-exe-path: "C:\\PHP\\php.exe"

@@ -43,6 +43,11 @@ public class Config {
         instance = this;
     }
 
+    // jarDirPathは他クラスでも使用するのでゲッターを作っておく
+    public static Path getJarDirPath() {
+        return Config.jarDirPath;
+    }
+
     public Map<String, Object> getConfig() {
     	if (Objects.isNull(config)) {
             // Configのインスタンスが初期化されていない場合は、設定を読み込む
@@ -68,6 +73,8 @@ public class Config {
             Files.createDirectories(dataDirectory);
         }
         
+        System.out.println("Setting directory location: " + dataDirectory.toString());
+
         // ファイルの作成
         if (!Files.exists(configPath)) {
             try (InputStream in = getClass().getResourceAsStream("/config.yml")) {
